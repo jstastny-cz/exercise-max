@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="1" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="42" started-at="2017-11-03T12:06:20Z" finished-at="2017-11-03T12:06:21Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="42" started-at="2017-11-03T12:06:20Z" finished-at="2017-11-03T12:06:21Z">
+      <class name="org.jboss.qe.dvqe.DummyTest">
+        <test-method status="PASS" signature="test()[pri:0, instance:org.jboss.qe.dvqe.DummyTest@6276ae34]" name="test" duration-ms="20" started-at="2017-11-03T13:06:21Z" finished-at="2017-11-03T13:06:21Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test -->
+      </class> <!-- org.jboss.qe.dvqe.DummyTest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
