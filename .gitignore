@@ -1,0 +1,20 @@
+/.metadata/
+.gitignore
+# Eclipse
+.classpath
+.project
+.settings/
+.recommenders
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+pom.xml
