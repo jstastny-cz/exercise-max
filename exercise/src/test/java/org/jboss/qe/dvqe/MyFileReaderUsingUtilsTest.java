@@ -14,10 +14,6 @@ public class MyFileReaderUsingUtilsTest {
 	File file = new File(classLoader.getResource("testfile.txt").getPath());
 	MyFileReaderUsingUtils fr = new MyFileReaderUsingUtils(file.getPath());
 
-  @Test
-  public void MyFileReaderUsingUtils() {
-    throw new RuntimeException("Test not implemented");
-  }
 
   @Test
   public void getNumberOfLines() {

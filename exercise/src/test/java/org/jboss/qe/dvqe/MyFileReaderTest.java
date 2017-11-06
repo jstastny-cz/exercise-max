@@ -16,11 +16,6 @@ public class MyFileReaderTest {
 	File file = new File(classLoader.getResource("testfile.txt").getPath());
 	MyFileReader fr = new MyFileReader(file.getPath());
 	
-
-@Test
-  public void MyFileReader() {
-    throw new RuntimeException("Test not implemented");
-  }
 @Test
   public void getNumberOfLinesTest() {
 	assertEquals(8,fr.getNumberOfLines(),"Testing getNumberOfLines()");
