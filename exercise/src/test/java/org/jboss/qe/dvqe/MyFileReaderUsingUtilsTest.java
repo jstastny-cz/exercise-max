@@ -1,57 +1,66 @@
 package org.jboss.qe.dvqe;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class MyFileReaderUsingUtilsTest {
-	
-	ClassLoader classLoader = getClass().getClassLoader();
-	File file = new File(classLoader.getResource("testfile.txt").getPath());
-	MyFileReaderUsingUtils fr = new MyFileReaderUsingUtils(file.getPath());
+    
+    MyFileReaderUsingUtils fr;
+    File file;
+  
+    @BeforeClass
+    public void setUp() {
+        ClassLoader classLoader = getClass().getClassLoader();
+        file = new File(classLoader.getResource("testfile.txt").getPath());
+        fr = new MyFileReaderUsingUtils(file.getPath());
+    }
 
+    @Test
+    public void getNumberOfLines() {
+	    assertEquals(fr.getNumberOfLines(),8,"Unexpected number of lines");
+	    assertNotEquals(fr.getNumberOfLines(),0,"Unexpected number of lines");
+	    assertNotEquals(fr.getNumberOfLines(),-1,"Unexpected number of lines");
+	    assertNotEquals(fr.getNumberOfLines(),321,"Unexpected number of lines");
+    }
 
-  @Test
-  public void getNumberOfLines() {
-	  assertEquals(8,fr.getNumberOfLines(),"Testing getNumberOfLines()");
-  }
+    @Test
+    public void getNumberOfNonEmptyLines() {
+	    assertEquals(fr.getNumberOfNonEmptyLines(),4,"Unexpected number of non-empty lines");
+	    assertNotEquals(fr.getNumberOfNonEmptyLines(),0,"Unexpected number of lines");
+	    assertNotEquals(fr.getNumberOfNonEmptyLines(),-1,"Unexpected number of lines");
+	    assertNotEquals(fr.getNumberOfNonEmptyLines(),321,"Unexpected number of lines");
+    }
 
-  @Test
-  public void getNumberOfNonEmptyLines() {
-	  assertEquals(4,fr.getNumberOfNonEmptyLines(),"Testing getNumberOfNonEmptyLines()");
-  }
+    @Test
+    public void readFirstNLines() {
+	    List<String> testLines = Arrays.asList(new String[]{"first","second"});
+	    List<String> actualLines = fr.readFirstNLines(2);
+	    assertEquals(actualLines.size(),2,"Unexpected size of list");
+	    assertNotEquals(actualLines.size(),0,"Unexpected size of list");
+	    assertNotEquals(actualLines.size(),-1,"Unexpected size of list");
+	    assertNotEquals(actualLines.size(),321,"Unexpected size of list");
+	    for(int i =0;i < actualLines.size();i++) {
+		    assertEquals(actualLines.get(i),testLines.get(i),"Unexpected element value");
+	    }
+    }
 
-  @Test
-  public void readFirstNLines() {
-	  List<String> testLines = new ArrayList<String>();
-	  List<String> actualLines = fr.readFirstNLines(2);
-	  testLines.add("first");
-	  testLines.add("second");
-	    
-	  assertEquals(2,actualLines.size(),"Testing size of array");
-	  for(int i =0;i < actualLines.size();i++) {
-		  assertEquals(testLines.get(i),actualLines.get(i),"Testing elements in list");
-	  }
-  }
-
-  @Test
-  public void readLines() {
-	  List<String> testLines = new ArrayList<String>();
-	  List<String> actualLines = fr.readLines();
-	  testLines.add("first");
-	  testLines.add("second");
-	  testLines.add("");
-	  testLines.add("fourth");
-	  testLines.add("");
-	  testLines.add("");
-	  testLines.add("seventh");
-	  testLines.add("");
-	  for(int i =0;i < actualLines.size();i++) {
-	      assertEquals(testLines.get(i),actualLines.get(i),"Testing elements in list");
-	  }
-  }
+    @Test
+    public void readLines() {
+        List<String> testLines = Arrays.asList(new String[]{"first","second","","fourth","","","seventh",""});
+	    List<String> actualLines = fr.readLines();
+	    assertEquals(actualLines.size(),8,"Unexpected size of list");
+	    assertNotEquals(actualLines.size(),0,"Unexpected size of list");
+	    assertNotEquals(actualLines.size(),-1,"Unexpected size of list");
+	    assertNotEquals(actualLines.size(),321,"Unexpected size of list");
+	    for(int i =0;i < actualLines.size();i++) {
+	        assertEquals(actualLines.get(i),testLines.get(i),"Unexpected element value");
+	    }
+    }
 }

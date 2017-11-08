@@ -10,23 +10,24 @@ import org.apache.commons.io.LineIterator;
 class MyFileReaderUsingUtils implements MyFileReaderInterface{
 	File file;
 	MyFileReaderUsingUtils(String path) {
-		if(path != null)
+		try {
 			file = new File(path);
+		}
+		catch(NullPointerException e) {
+			System.err.println("Missing path");
+		}
 	}
     public int getNumberOfLines() {
 		int numOfLines = 0;
 		try {
-    	   LineIterator it = FileUtils.lineIterator(file, "UTF-8");
-    	    while (it.hasNext()) {
-       	     numOfLines++;
-       	     it.nextLine();
-       	   }
+		    LineIterator it = FileUtils.lineIterator(file, "UTF-8");
+		    while (it.hasNext()) {
+		        numOfLines++;
+		        it.nextLine();
+       	    }
 		}
 		catch(IOException e) {
-			System.out.println("error");
-		}
-		finally {
-		
+			System.err.println("Can't read file");
 		}
     	return numOfLines;
 	}
@@ -35,43 +36,39 @@ class MyFileReaderUsingUtils implements MyFileReaderInterface{
 		try {
     	    LineIterator it = FileUtils.lineIterator(file, "UTF-8");
     	    while (it.hasNext()) {
-    	    if(it.nextLine().length() == 0)
-       	     numOfEmptyLines++;
+    	    	if(!(it.nextLine().isEmpty()))
+    	    	numOfEmptyLines++;
        	    }
 		}
 		catch(IOException e) {
-			System.out.println("error");
+		    System.err.println("Can't read file");
 		}
 		return numOfEmptyLines;
 	}
+
 	public List<String> readLines() {
+		List<String> lines = null;
 		try {
-			return FileUtils.readLines(file, "UTF-8");
+			lines = FileUtils.readLines(file, "UTF-8");
 		}
 		catch(IOException e) {
-			System.out.println("error");
-			return null;
+		    System.err.println("Can't read file");
 		}
+		return lines;
 	}
 	public List<String> readFirstNLines(int n) {
-		List<String> lines = new ArrayList<String>();
-		LineIterator it = null;
-		int i = 0;
+		List<String> lines = null;
+		LineIterator iterator = null;
 		try {
-    	    it = FileUtils.lineIterator(file, "UTF-8");
-    	    while (it.hasNext() && i<n) {
-    	    	lines.add(it.nextLine());
-    	    	i++;
+    	    iterator = FileUtils.lineIterator(file, "UTF-8");
+    	    lines = new ArrayList<String>();
+    	    for(int i=0; (i<n)&&iterator.hasNext();i++) {
+    	    	lines.add(iterator.nextLine());
        	    }
-    	    if(it != null) {
-    	    	it.close();
-    	    }
-    	    return lines;
-    	   
-		}
+    	}
 		catch(IOException e) {
-			System.out.println("error");
-			return null;
+		    System.err.println("Can't read file");
 		}
+		return lines;
 	}
 }
