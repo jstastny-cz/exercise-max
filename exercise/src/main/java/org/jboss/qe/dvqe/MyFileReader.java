@@ -19,6 +19,7 @@ class MyFileReader implements MyFileReaderInterface {
             System.err.println("Missing path");
         }
     }
+
     public Scanner getScanner() {
         try {
             scanner = new Scanner(new BufferedReader(new FileReader(file)));
@@ -65,9 +66,9 @@ class MyFileReader implements MyFileReaderInterface {
         List<String> lines = null;
         try (Scanner scanner = getScanner()) {
             lines = new ArrayList<String>();
-            for(int i=0;scanner.hasNextLine() && i<numOfLines;i++)
+            for (int i = 0; scanner.hasNextLine() && i < numOfLines; i++)
                 lines.add(scanner.nextLine());
-            }
-            return lines;
+        }
+        return lines;
     }
 }
