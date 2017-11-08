@@ -23,9 +23,10 @@ class MyFileReaderUsingUtils implements MyFileReaderInterface {
     }
 
     public int getNumberOfLines() {
-        int numOfLines = 0;
+        int numOfLines = -1;
         try {
             LineIterator it = FileUtils.lineIterator(file, "UTF-8");
+            numOfLines = 0;
             while (it.hasNext()) {
                 numOfLines++;
                 it.nextLine();
@@ -37,9 +38,10 @@ class MyFileReaderUsingUtils implements MyFileReaderInterface {
     }
 
     public int getNumberOfNonEmptyLines() {
-        int numOfEmptyLines = 0;
+        int numOfEmptyLines = -1;
         try {
             LineIterator it = FileUtils.lineIterator(file, "UTF-8");
+            numOfEmptyLines = 0;
             while (it.hasNext()) {
                 if (!(it.nextLine().isEmpty()))
                     numOfEmptyLines++;
