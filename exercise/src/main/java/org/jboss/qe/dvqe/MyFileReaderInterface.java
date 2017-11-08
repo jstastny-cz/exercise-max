@@ -24,6 +24,6 @@ List<String> readLines();
 * Method readFirstNLines reads first n lines from the file.
 * @return the lines read.
 **/
-List<String> readFirstNLines(int n);
+List<String> readFirstNLines(int numOfLines);
 
 }
