@@ -2,7 +2,6 @@ package org.jboss.qe.dvqe;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,16 +13,16 @@ class MyFileReaderUsingUtils implements MyFileReaderInterface {
 
     MyFileReaderUsingUtils(String path) throws FileNotFoundException {
         if (path == null || path.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Missing argument");
         }
         file = new File(path);
         if (!file.isFile()) {
-            throw new FileNotFoundException();
+            throw new FileNotFoundException("File doesn't exist");
         }
     }
 
     public int getNumberOfLines() {
-        int numOfLines = -1;
+        int numOfLines;
         try {
             LineIterator it = FileUtils.lineIterator(file, "UTF-8");
             numOfLines = 0;
@@ -31,14 +30,15 @@ class MyFileReaderUsingUtils implements MyFileReaderInterface {
                 numOfLines++;
                 it.nextLine();
             }
-        } catch (IOException e) {
-            System.err.println("Can't read file");
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + e.getMessage());
+            numOfLines = -1;
         }
         return numOfLines;
     }
 
     public int getNumberOfNonEmptyLines() {
-        int numOfEmptyLines = -1;
+        int numOfEmptyLines;
         try {
             LineIterator it = FileUtils.lineIterator(file, "UTF-8");
             numOfEmptyLines = 0;
@@ -46,33 +46,36 @@ class MyFileReaderUsingUtils implements MyFileReaderInterface {
                 if (!(it.nextLine().isEmpty()))
                     numOfEmptyLines++;
             }
-        } catch (IOException e) {
-            System.err.println("Can't read file");
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + e.getMessage());
+            numOfEmptyLines = -1;
         }
         return numOfEmptyLines;
     }
 
     public List<String> readLines() {
-        List<String> lines = null;
+        List<String> lines;
         try {
             lines = FileUtils.readLines(file, "UTF-8");
-        } catch (IOException e) {
-            System.err.println("Can't read file");
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + e.getMessage());
+            lines = null;
         }
         return lines;
     }
 
     public List<String> readFirstNLines(int n) {
-        List<String> lines = null;
-        LineIterator iterator = null;
+        List<String> lines;
+        LineIterator iterator;
         try {
             iterator = FileUtils.lineIterator(file, "UTF-8");
             lines = new ArrayList<String>();
             for (int i = 0; (i < n) && iterator.hasNext(); i++) {
                 lines.add(iterator.nextLine());
             }
-        } catch (IOException e) {
-            System.err.println("Can't read file");
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + e.getMessage());
+            lines = null;
         }
         return lines;
     }
