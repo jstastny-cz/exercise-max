@@ -10,8 +10,6 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 class MyFileReader implements MyFileReaderInterface {
     private final Logger logger = LoggerFactory.getLogger(MyFileReader.class);
     File file = null;
@@ -56,7 +54,7 @@ class MyFileReader implements MyFileReaderInterface {
                     numOfNonEmptyLines++;
             }
         } catch (Exception e) {
-            logger.error("Read operation failed: ",e);
+            logger.error("Read operation failed: ", e);
             numOfNonEmptyLines = -1;
         }
         return numOfNonEmptyLines;
@@ -70,7 +68,7 @@ class MyFileReader implements MyFileReaderInterface {
                 lines.add(scanner.nextLine());
             }
         } catch (Exception e) {
-            logger.error("Read operation failed: ",e);
+            logger.error("Read operation failed: ", e);
             lines = null;
         }
         return lines;
@@ -83,7 +81,7 @@ class MyFileReader implements MyFileReaderInterface {
             for (int i = 0; scanner.hasNextLine() && i < numOfLines; i++)
                 lines.add(scanner.nextLine());
         } catch (Exception e) {
-            logger.error("Read operation failed: ",e);
+            logger.error("Read operation failed: ", e);
             lines = null;
         }
         return lines;
