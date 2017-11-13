@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 class MyFileReader implements MyFileReaderInterface {
-    private final Logger logger = LoggerFactory.getLogger(MyFileReader.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(MyFileReader.class);
     File file = null;
     Scanner scanner = null;
 
@@ -39,7 +39,7 @@ class MyFileReader implements MyFileReaderInterface {
                 sc.nextLine();
             }
         } catch (Exception e) {
-            logger.error("Read operation failed: ", e);
+            LOGGER.error("Read operation failed: ", e);
             numOfLines = -1;
         }
         return numOfLines;
@@ -54,7 +54,7 @@ class MyFileReader implements MyFileReaderInterface {
                     numOfNonEmptyLines++;
             }
         } catch (Exception e) {
-            logger.error("Read operation failed: ", e);
+            LOGGER.error("Read operation failed: ", e);
             numOfNonEmptyLines = -1;
         }
         return numOfNonEmptyLines;
@@ -68,7 +68,7 @@ class MyFileReader implements MyFileReaderInterface {
                 lines.add(scanner.nextLine());
             }
         } catch (Exception e) {
-            logger.error("Read operation failed: ", e);
+            LOGGER.error("Read operation failed: ", e);
             lines = null;
         }
         return lines;
@@ -77,11 +77,13 @@ class MyFileReader implements MyFileReaderInterface {
     public List<String> readFirstNLines(int numOfLines) {
         List<String> lines;
         try (Scanner scanner = getScanner()) {
+            if (numOfLines <= 0)
+                throw new IllegalArgumentException("Invalid Argument");
             lines = new ArrayList<String>();
             for (int i = 0; scanner.hasNextLine() && i < numOfLines; i++)
                 lines.add(scanner.nextLine());
         } catch (Exception e) {
-            logger.error("Read operation failed: ", e);
+            LOGGER.error("Read operation failed: ", e);
             lines = null;
         }
         return lines;
