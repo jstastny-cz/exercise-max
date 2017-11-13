@@ -18,8 +18,7 @@ public class MyFileReaderUsingUtilsTest {
 
     @BeforeClass
     public void setUp() throws FileNotFoundException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        file = new File(classLoader.getResource("testfile.txt").getPath());
+        file = new File(getClass().getResource("/testfile.txt").getFile());
         fr = new MyFileReaderUsingUtils(file.getPath());
     }
 

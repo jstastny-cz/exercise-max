@@ -7,8 +7,13 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 class MyFileReader implements MyFileReaderInterface {
+    private final Logger logger = LoggerFactory.getLogger(MyFileReader.class);
     File file = null;
     Scanner scanner = null;
 
@@ -22,7 +27,7 @@ class MyFileReader implements MyFileReaderInterface {
         }
     }
 
-    public Scanner getScanner() throws FileNotFoundException {
+    private Scanner getScanner() throws FileNotFoundException {
         scanner = new Scanner(new BufferedReader(new FileReader(file)));
         return scanner;
     }
@@ -36,7 +41,7 @@ class MyFileReader implements MyFileReaderInterface {
                 sc.nextLine();
             }
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + e.getMessage());
+            logger.error("Read operation failed: ", e);
             numOfLines = -1;
         }
         return numOfLines;
@@ -51,7 +56,7 @@ class MyFileReader implements MyFileReaderInterface {
                     numOfNonEmptyLines++;
             }
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + e.getMessage());
+            logger.error("Read operation failed: ",e);
             numOfNonEmptyLines = -1;
         }
         return numOfNonEmptyLines;
@@ -65,7 +70,7 @@ class MyFileReader implements MyFileReaderInterface {
                 lines.add(scanner.nextLine());
             }
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + e.getMessage());
+            logger.error("Read operation failed: ",e);
             lines = null;
         }
         return lines;
@@ -78,7 +83,7 @@ class MyFileReader implements MyFileReaderInterface {
             for (int i = 0; scanner.hasNextLine() && i < numOfLines; i++)
                 lines.add(scanner.nextLine());
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + e.getMessage());
+            logger.error("Read operation failed: ",e);
             lines = null;
         }
         return lines;
