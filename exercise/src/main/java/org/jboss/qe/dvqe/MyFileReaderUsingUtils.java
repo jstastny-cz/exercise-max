@@ -4,11 +4,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 
 class MyFileReaderUsingUtils implements MyFileReaderInterface {
+    private final Logger logger = LoggerFactory.getLogger(MyFileReaderUsingUtils.class);
     File file;
 
     MyFileReaderUsingUtils(String path) throws FileNotFoundException {
@@ -31,7 +35,7 @@ class MyFileReaderUsingUtils implements MyFileReaderInterface {
                 it.nextLine();
             }
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + e.getMessage());
+            logger.error("Read operation failed: ",e);
             numOfLines = -1;
         }
         return numOfLines;
@@ -47,7 +51,7 @@ class MyFileReaderUsingUtils implements MyFileReaderInterface {
                     numOfEmptyLines++;
             }
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + e.getMessage());
+            logger.error("Read operation failed: ",e);
             numOfEmptyLines = -1;
         }
         return numOfEmptyLines;
@@ -58,7 +62,7 @@ class MyFileReaderUsingUtils implements MyFileReaderInterface {
         try {
             lines = FileUtils.readLines(file, "UTF-8");
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + e.getMessage());
+            logger.error("Read operation failed: ",e);
             lines = null;
         }
         return lines;
@@ -74,7 +78,7 @@ class MyFileReaderUsingUtils implements MyFileReaderInterface {
                 lines.add(iterator.nextLine());
             }
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + e.getMessage());
+            logger.error("Read operation failed: ",e);
             lines = null;
         }
         return lines;
