@@ -12,16 +12,19 @@ import java.util.List;
 @Test
 public class MyFileReaderTest {
 
-    MyFileReader fr, frEmpty;
-    File file, tempFile;
+    MyFileReader fr, frNull, frEmpty;
+    File file, tempFile, emptyFile;
 
     @BeforeClass
     public void setUp() throws IOException {
         file = new File(getClass().getResource("/testfile.txt").getFile());
         fr = new MyFileReader(file.getPath());
         tempFile = File.createTempFile("tempFile", ".tmp");
-        frEmpty = new MyFileReader(tempFile.getPath());
+        frNull = new MyFileReader(tempFile.getPath());
         tempFile.delete();
+        emptyFile = File.createTempFile("emptyFile", ".tmp");
+        emptyFile.deleteOnExit();
+        frEmpty = new MyFileReader(emptyFile.getPath());
     }
 
     @Test
@@ -31,7 +34,12 @@ public class MyFileReaderTest {
 
     @Test
     public void getNumberOfLinesNullFileTest() {
-        assertEquals(frEmpty.getNumberOfLines(), -1, "Unexpected return value");
+        assertEquals(frNull.getNumberOfLines(), -1, "Unexpected return value");
+    }
+
+    @Test
+    public void getNumberOfLinesEmptyFileTest() {
+        assertEquals(frEmpty.getNumberOfLines(), 0, "Unexpected number of lines");
     }
 
     @Test
@@ -41,7 +49,12 @@ public class MyFileReaderTest {
 
     @Test
     public void getNumberOfNonEmptyLinesNullFileTest() {
-        assertEquals(frEmpty.getNumberOfLines(), -1, "Unexpected return value");
+        assertEquals(frNull.getNumberOfLines(), -1, "Unexpected return value");
+    }
+
+    @Test
+    public void getNumberOfNonEmptyLinesEmptyFileTest() {
+        assertEquals(frEmpty.getNumberOfLines(), 0, "Unexpected number of lines");
     }
 
     @Test
@@ -56,7 +69,12 @@ public class MyFileReaderTest {
 
     @Test
     public void readFirstNLinesNullFileTest() {
-        assertEquals(frEmpty.readFirstNLines(1), null, "Unexpected return value");
+        assertEquals(frNull.readFirstNLines(1), null, "Unexpected return value");
+    }
+
+    @Test
+    public void readFirstNLinesEmptyFileTest() {
+        assertEquals(frEmpty.readFirstNLines(1).size(), 0, "Unexpected return value");
     }
 
     @Test
@@ -81,6 +99,11 @@ public class MyFileReaderTest {
 
     @Test
     public void readLinesNullFileTest() {
-        assertEquals(frEmpty.readLines(), null, "Unexpected return value");
+        assertEquals(frNull.readLines(), null, "Unexpected return value");
+    }
+
+    @Test
+    public void readLinesEmptyFileTest() {
+        assertEquals(frEmpty.readLines().size(), 0, "Unexpected return value");
     }
 }
