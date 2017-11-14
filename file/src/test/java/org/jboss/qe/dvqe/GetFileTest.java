@@ -27,11 +27,11 @@ public class GetFileTest {
         overlayDir = overlayPath.toFile();
         basicDir.deleteOnExit();
 
-        testFile = Files.createTempFile(basicPath, "basicFolderFile", ".txt").toFile();
+        testFile = Files.createTempFile(basicPath, "basicDirFile", ".txt").toFile();
         testFile.deleteOnExit();
         testFileName = testFile.getName();
 
-        testFile2 = Files.createTempFile(basicPath, "overlayFolderFile", ".txt").toFile();
+        testFile2 = Files.createTempFile(basicPath, "overlayDirFile", ".txt").toFile();
         testFileName2 = testFile2.getName();
         testFile2.deleteOnExit();
 

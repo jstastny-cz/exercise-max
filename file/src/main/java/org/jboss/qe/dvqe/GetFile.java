@@ -29,10 +29,11 @@ public class GetFile {
             .convertFileCollectionToFileArray(FileUtils.listFiles(basicDir, new NameFileFilter(filename), null))) {
             foundFile = file;
         }
-        for (File file : FileUtils
-            .convertFileCollectionToFileArray(FileUtils.listFiles(overlayDir, new NameFileFilter(filename), null))) {
-            foundFile = file;
-        }
+        if(foundFile != null)
+            for (File file : FileUtils
+                .convertFileCollectionToFileArray(FileUtils.listFiles(overlayDir, new NameFileFilter(filename), null))) {
+                foundFile = file;
+            }
         return foundFile;
     }
 }
