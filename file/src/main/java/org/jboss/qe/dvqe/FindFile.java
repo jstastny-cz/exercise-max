@@ -1,15 +1,14 @@
 package org.jboss.qe.dvqe;
 
 import java.io.File;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 
-public class GetFile {
+public class FindFile {
 
     File basicDir, overlayDir;
 
-    GetFile(File basicDir, File overlayDir) {
+    FindFile(File basicDir, File overlayDir) {
         if (basicDir == null || overlayDir == null) {
             throw new IllegalArgumentException("Missing argument");
         }
@@ -23,16 +22,16 @@ public class GetFile {
         this.overlayDir = overlayDir;
     }
 
-    public File findFile(String filename) {
+    public File find(String filename) {
         File foundFile = null;
-        for (File file : FileUtils
-            .convertFileCollectionToFileArray(FileUtils.listFiles(basicDir, new NameFileFilter(filename), null))) {
-            foundFile = file;
-        }
-        if(foundFile != null)
-            for (File file : FileUtils
-                .convertFileCollectionToFileArray(FileUtils.listFiles(overlayDir, new NameFileFilter(filename), null))) {
+        for (File file : FileUtils.listFiles(basicDir, new NameFileFilter(filename), null)) {
+            if (!file.isDirectory())
                 foundFile = file;
+        }
+        if (foundFile == null)
+            for (File file : FileUtils.listFiles(overlayDir, new NameFileFilter(filename), null)) {
+                if (!file.isDirectory())
+                    foundFile = file;
             }
         return foundFile;
     }
