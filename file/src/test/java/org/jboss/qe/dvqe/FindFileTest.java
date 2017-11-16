@@ -3,34 +3,52 @@ package org.jboss.qe.dvqe;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.testng.annotations.BeforeClass;
 
 public class FindFileTest {
 
-    File basicDir, overlayDir, testFileinBasic, testFileinOverlay, testDir;
+    File basicDir, testFileinBasic, testFileinOverlay, testDir, testFileSameNameBasic, testFileSameNameOverlay,
+            testFileinBasicSameName, testFileInOverlaySameName;
+    File[] overlayDirs, overlayDirsFiles, overlayDirsFilesSameName;
     FindFile testObj;
 
     @BeforeClass
     public void beforeClass() throws IOException {
 
-        Path basicPath = Files.createTempDirectory("basicDir");
-        basicDir = basicPath.toFile();
+        basicDir = Files.createTempDirectory("basicDir").toFile();
         basicDir.deleteOnExit();
-        Path overlayPath = Files.createTempDirectory("overlayDir");
-        overlayDir = overlayPath.toFile();
-        basicDir.deleteOnExit();
-        testFileinBasic = Files.createTempFile(basicPath, "basicDirFile", ".txt").toFile();
+        testFileinBasic = new File(basicDir, "basicFile");
+        testFileinBasic.createNewFile();
         testFileinBasic.deleteOnExit();
-        testFileinOverlay = Files.createTempFile(overlayPath, "overlayDirFile", ".txt").toFile();
-        testFileinOverlay.deleteOnExit();
-        testDir = Files.createTempDirectory(basicPath, "DirFile").toFile();
+
+        testFileinBasicSameName = new File(basicDir, "sameFileName");
+        testFileinBasicSameName.createNewFile();
+        testFileinBasicSameName.deleteOnExit();
+
+        overlayDirs = new File[3];
+        overlayDirsFiles = new File[3];
+        overlayDirsFilesSameName = new File[3];
+        for (int i = 0; i < 3; i++) {
+            overlayDirs[i] = Files.createTempDirectory("overlayDir").toFile();
+            overlayDirs[i].deleteOnExit();
+            overlayDirsFiles[i] = new File(overlayDirs[i], "File" + i);
+            overlayDirsFiles[i].createNewFile();
+            overlayDirsFiles[i].deleteOnExit();
+            overlayDirsFilesSameName[i] = new File(overlayDirs[i], "sameFileName");
+            overlayDirsFilesSameName[i].createNewFile();
+            overlayDirsFilesSameName[i].deleteOnExit();
+        }
+
+        testDir = Files.createTempDirectory(Paths.get(basicDir.getPath()), "DirFile").toFile();
         testDir.deleteOnExit();
-        testObj = new FindFile(basicDir, overlayDir);
+        testObj = new FindFile(basicDir, overlayDirs);
     }
 
     @Test
@@ -44,12 +62,22 @@ public class FindFileTest {
     }
 
     @Test
-    public void findFileInOverLayDirTest() {
-        assertEquals(testObj.find(testFileinOverlay.getName()), testFileinOverlay, "unexpected file retured");
+    public void findFileInOverlayDirTest() {
+        for (File file : overlayDirsFiles) {
+            assertEquals(testObj.find(file.getName()), file, "unexpected file retured");
+        }
     }
 
     @Test
     public void findFileInCaseDirTest() {
         assertEquals(testObj.find(testDir.getName()), null, "unexpected file retured");
+    }
+
+    @Test
+    public void findFileSameNameInDirsTest() {
+        assertEquals(testObj.find("sameFileName"), overlayDirsFilesSameName[2], "unexpected file retured");
+        assertNotEquals(testObj.find("sameFileName"), overlayDirsFilesSameName[1], "unexpected file retured");
+        assertNotEquals(testObj.find("sameFileName"), overlayDirsFilesSameName[0], "unexpected file retured");
+        assertNotEquals(testObj.find("sameFileName"), testFileinBasicSameName, "unexpected file retured");
     }
 }
