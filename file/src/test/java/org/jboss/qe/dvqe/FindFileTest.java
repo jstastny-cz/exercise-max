@@ -3,7 +3,6 @@ package org.jboss.qe.dvqe;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +47,7 @@ public class FindFileTest {
 
         testDir = Files.createTempDirectory(Paths.get(basicDir.getPath()), "DirFile").toFile();
         testDir.deleteOnExit();
-        testObj = new FindFile(basicDir, overlayDirs);
+        testObj = new FindFile(basicDir);
     }
 
     @Test
@@ -69,15 +68,12 @@ public class FindFileTest {
     }
 
     @Test
-    public void findFileInCaseDirTest() {
+    public void findFileIfDirTest() {
         assertEquals(testObj.find(testDir.getName()), null, "unexpected file retured");
     }
 
     @Test
     public void findFileSameNameInDirsTest() {
         assertEquals(testObj.find("sameFileName"), overlayDirsFilesSameName[2], "unexpected file retured");
-        assertNotEquals(testObj.find("sameFileName"), overlayDirsFilesSameName[1], "unexpected file retured");
-        assertNotEquals(testObj.find("sameFileName"), overlayDirsFilesSameName[0], "unexpected file retured");
-        assertNotEquals(testObj.find("sameFileName"), testFileinBasicSameName, "unexpected file retured");
     }
 }

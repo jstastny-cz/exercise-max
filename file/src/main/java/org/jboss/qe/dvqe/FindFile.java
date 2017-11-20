@@ -1,24 +1,38 @@
 package org.jboss.qe.dvqe;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 
 public class FindFile {
 
-    File basicDir;
-    File[] overlayDirs;
+    private File basicDir;
+    private File[] overlayDirs;
 
     FindFile(File basicDir, File... overlayDirs) {
-        if (basicDir == null || overlayDirs == null) {
-            throw new IllegalArgumentException("Missing argument");
+        if (basicDir == null) {
+            throw new NullPointerException("Missing first argument: basic directory");
         }
+        if (overlayDirs == null) {
+            throw new NullPointerException("second argument is NULL");
+        }
+        for (File file : overlayDirs) {
+            int argument = 3;
+            if (file == null)
+                throw new NullPointerException(++argument + ".argument is  NULL");
+        }
+
         if (!basicDir.isDirectory()) {
-            throw new IllegalArgumentException("First argument is not a directory");
+            throw new IllegalArgumentException("First argument " + basicDir + " is not a directory");
         }
-        for (int i = 0; i < overlayDirs.length; i++) {
-            if (!overlayDirs[i].isDirectory()) {
-                throw new IllegalArgumentException("argument is not a directory");
+        for (File file : overlayDirs) {
+            if (!file.isDirectory()) {
+                throw new IllegalArgumentException("argument " + file + " is not a directory");
             }
         }
         this.basicDir = basicDir;
@@ -27,13 +41,15 @@ public class FindFile {
 
     public File find(String filename) {
         File file = null;
-        for (int index = overlayDirs.length - 1; index >= 0 && file == null; index--) {
-            file = checkDir(filename, overlayDirs[index]);
+        List<File> overlayDirs = Arrays.asList(this.overlayDirs);
+        Collections.reverse(overlayDirs);
+        Iterator<File> dirIterator = overlayDirs.iterator();
+        while (dirIterator.hasNext() && file == null) {
+            file = checkDir(filename, dirIterator.next());
         }
         if (file == null)
             file = checkDir(filename, basicDir);
         return file;
-
     }
 
     private File checkDir(String filename, File dir) {
