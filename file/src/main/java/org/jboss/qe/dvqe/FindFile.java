@@ -24,7 +24,8 @@ public class FindFile {
         for (File file : overlayDirs) {
             int argument = 3;
             if (file == null)
-                throw new NullPointerException(++argument + ".argument is  NULL");
+                throw new NullPointerException(argument + ".argument is  NULL");
+            argument++;
         }
 
         if (!basicDir.isDirectory()) {
