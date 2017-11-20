@@ -18,22 +18,20 @@ public class FindFile {
         if (basicDir == null) {
             throw new NullPointerException("Missing first argument: basic directory");
         }
-        if (overlayDirs == null) {
-            throw new NullPointerException("second argument is NULL");
-        }
-        for (File file : overlayDirs) {
-            int argument = 3;
-            if (file == null)
-                throw new NullPointerException(++argument + ".argument is  NULL");
-        }
-
         if (!basicDir.isDirectory()) {
             throw new IllegalArgumentException("First argument " + basicDir + " is not a directory");
         }
+        if (overlayDirs == null) {
+            throw new NullPointerException("second argument is NULL");
+        }
+        int argument = 2;
         for (File file : overlayDirs) {
-            if (!file.isDirectory()) {
-                throw new IllegalArgumentException("argument " + file + " is not a directory");
+            if (file == null) {
+                throw new NullPointerException(argument + ".argument is  NULL");
             }
+            else if (!file.isDirectory()) 
+                throw new IllegalArgumentException("argument " + file + " is not a directory");
+            argument++;
         }
         this.basicDir = basicDir;
         this.overlayDirs = overlayDirs;
