@@ -1,61 +1,64 @@
 package org.jboss.qe.dvqe;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.NameFileFilter;
 
 public class FindFile {
 
-    private File basicDir;
-    private File[] overlayDirs;
+    private List<File> directories;
 
-    FindFile(File basicDir, File... overlayDirs) {
+    /**
+     * 
+     * @param basicDir
+     *            basic directory
+     * @param overlayDirs
+     *            variable number of overlay directories
+     * @throws NullPointerException
+     *             if argument is null
+     * @throws IllegalArgumentException
+     *             if argument is not a directory
+     */
+    public FindFile(File basicDir, File... overlayDirs) {
         if (basicDir == null) {
-            throw new NullPointerException("Missing first argument: basic directory");
+            throw new NullPointerException("Missing parameter: basic directory");
         }
+
         if (!basicDir.isDirectory()) {
-            throw new IllegalArgumentException("First argument " + basicDir + " is not a directory");
+            throw new IllegalArgumentException("parameter " + basicDir + " is not a directory");
         }
-        if (overlayDirs == null) {
-            throw new NullPointerException("second argument is NULL");
+
+        if (overlayDirs == null || Arrays.asList(overlayDirs).contains(null)) {
+            throw new NullPointerException("one of overlay directories is NULL");
         }
-        int argument = 2;
+
         for (File file : overlayDirs) {
-            if (file == null) {
-                throw new NullPointerException(argument + ".argument is  NULL");
+            if (!file.isDirectory()) {
+                throw new IllegalArgumentException("parameter " + file + " is not a directory");
             }
-            else if (!file.isDirectory()) 
-                throw new IllegalArgumentException("argument " + file + " is not a directory");
-            argument++;
         }
-        this.basicDir = basicDir;
-        this.overlayDirs = overlayDirs;
+        directories = new ArrayList<>();
+        directories.add(basicDir);
+        directories.addAll(Arrays.asList(overlayDirs));
+        Collections.reverse(directories);
     }
 
+    /**
+     * 
+     * @param filename
+     *            name of file
+     * @return found file or null
+     */
     public File find(String filename) {
         File file = null;
-        List<File> overlayDirs = Arrays.asList(this.overlayDirs);
-        Collections.reverse(overlayDirs);
-        Iterator<File> dirIterator = overlayDirs.iterator();
-        while (dirIterator.hasNext() && file == null) {
-            file = checkDir(filename, dirIterator.next());
+        for (File dir : directories) {
+            file = new File(dir, filename);
+            if (file.exists() && !file.isDirectory()) {
+                return file;
+            }
         }
-        if (file == null)
-            file = checkDir(filename, basicDir);
-        return file;
-    }
-
-    private File checkDir(String filename, File dir) {
-        File foundFile = null;
-        for (File file : FileUtils.listFiles(dir, new NameFileFilter(filename), null)) {
-            if (!file.isDirectory())
-                foundFile = file;
-        }
-        return foundFile;
+        return null;
     }
 }

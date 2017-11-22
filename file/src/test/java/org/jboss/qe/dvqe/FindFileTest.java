@@ -47,7 +47,7 @@ public class FindFileTest {
 
         testDir = Files.createTempDirectory(Paths.get(basicDir.getPath()), "DirFile").toFile();
         testDir.deleteOnExit();
-        testObj = new FindFile(basicDir);
+        testObj = new FindFile(basicDir,overlayDirs);
     }
 
     @Test
