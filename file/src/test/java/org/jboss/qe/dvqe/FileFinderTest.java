@@ -11,12 +11,11 @@ import java.nio.file.Paths;
 
 import org.testng.annotations.BeforeClass;
 
-public class FindFileTest {
+public class FileFinderTest {
 
-    File basicDir, testFileinBasic, testFileinOverlay, testDir, testFileSameNameBasic, testFileSameNameOverlay,
-            testFileinBasicSameName, testFileInOverlaySameName;
+    File basicDir, testFileinBasic, testFileinOverlay, testDir, testFileinBasicSameName;
     File[] overlayDirs, overlayDirsFiles, overlayDirsFilesSameName;
-    FindFile testObj;
+    FileFinder testObj;
 
     @BeforeClass
     public void beforeClass() throws IOException {
@@ -47,7 +46,7 @@ public class FindFileTest {
 
         testDir = Files.createTempDirectory(Paths.get(basicDir.getPath()), "DirFile").toFile();
         testDir.deleteOnExit();
-        testObj = new FindFile(basicDir,overlayDirs);
+        testObj = new FileFinder(basicDir, overlayDirs);
     }
 
     @Test

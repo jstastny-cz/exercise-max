@@ -6,9 +6,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class FindFile {
+public class FileFinder {
 
-    private List<File> directories;
+    private List<File> directories = new ArrayList<>();
 
     /**
      * 
@@ -21,7 +21,7 @@ public class FindFile {
      * @throws IllegalArgumentException
      *             if argument is not a directory
      */
-    public FindFile(File basicDir, File... overlayDirs) {
+    public FileFinder(File basicDir, File... overlayDirs) {
         if (basicDir == null) {
             throw new NullPointerException("Missing parameter: basic directory");
         }
@@ -39,14 +39,13 @@ public class FindFile {
                 throw new IllegalArgumentException("parameter " + file + " is not a directory");
             }
         }
-        directories = new ArrayList<>();
         directories.add(basicDir);
         directories.addAll(Arrays.asList(overlayDirs));
         Collections.reverse(directories);
     }
 
     /**
-     * 
+     *
      * @param filename
      *            name of file
      * @return found file or null
@@ -55,7 +54,7 @@ public class FindFile {
         File file = null;
         for (File dir : directories) {
             file = new File(dir, filename);
-            if (file.exists() && !file.isDirectory()) {
+            if (file.exists() && file.isFile()) {
                 return file;
             }
         }
