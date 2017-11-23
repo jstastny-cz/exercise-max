@@ -54,7 +54,7 @@ public class OverlayFileSelector {
         File file = null;
         for (File dir : directories) {
             file = new File(dir, filename);
-            if (file.exists() && file.isFile()) {
+            if (file.isFile()) {
                 return file;
             }
         }
