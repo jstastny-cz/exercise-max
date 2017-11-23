@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class FileFinder {
+public class OverlayFileSelector {
 
     private List<File> directories = new ArrayList<>();
 
@@ -21,7 +21,7 @@ public class FileFinder {
      * @throws IllegalArgumentException
      *             if argument is not a directory
      */
-    public FileFinder(File basicDir, File... overlayDirs) {
+    public OverlayFileSelector(File basicDir, File... overlayDirs) {
         if (basicDir == null) {
             throw new NullPointerException("Missing parameter: basic directory");
         }
@@ -50,7 +50,7 @@ public class FileFinder {
      *            name of file
      * @return found file or null
      */
-    public File find(String filename) {
+    public File select(String filename) {
         File file = null;
         for (File dir : directories) {
             file = new File(dir, filename);

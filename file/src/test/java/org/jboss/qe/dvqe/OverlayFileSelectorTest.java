@@ -11,11 +11,11 @@ import java.nio.file.Paths;
 
 import org.testng.annotations.BeforeClass;
 
-public class FileFinderTest {
+public class OverlayFileSelectorTest {
 
     File basicDir, testFileinBasic, testFileinOverlay, testDir, testFileinBasicSameName;
     File[] overlayDirs, overlayDirsFiles, overlayDirsFilesSameName;
-    FileFinder testObj;
+    OverlayFileSelector testObj;
 
     @BeforeClass
     public void beforeClass() throws IOException {
@@ -46,33 +46,33 @@ public class FileFinderTest {
 
         testDir = Files.createTempDirectory(Paths.get(basicDir.getPath()), "DirFile").toFile();
         testDir.deleteOnExit();
-        testObj = new FileFinder(basicDir, overlayDirs);
+        testObj = new OverlayFileSelector(basicDir, overlayDirs);
     }
 
     @Test
     public void findFileInBasicDirTest() {
-        assertEquals(testObj.find(testFileinBasic.getName()), testFileinBasic, "unexpected file retured");
+        assertEquals(testObj.select(testFileinBasic.getName()), testFileinBasic, "unexpected file retured");
     }
 
     @Test
     public void findFileNonExistentFileTest() {
-        assertEquals(testObj.find("madeUpFile"), null, "unexpected value retured");
+        assertEquals(testObj.select("madeUpFile"), null, "unexpected value retured");
     }
 
     @Test
     public void findFileInOverlayDirTest() {
         for (File file : overlayDirsFiles) {
-            assertEquals(testObj.find(file.getName()), file, "unexpected file retured");
+            assertEquals(testObj.select(file.getName()), file, "unexpected file retured");
         }
     }
 
     @Test
     public void findFileIfDirTest() {
-        assertEquals(testObj.find(testDir.getName()), null, "unexpected file retured");
+        assertEquals(testObj.select(testDir.getName()), null, "unexpected file retured");
     }
 
     @Test
     public void findFileSameNameInDirsTest() {
-        assertEquals(testObj.find("sameFileName"), overlayDirsFilesSameName[2], "unexpected file retured");
+        assertEquals(testObj.select("sameFileName"), overlayDirsFilesSameName[2], "unexpected file retured");
     }
 }
