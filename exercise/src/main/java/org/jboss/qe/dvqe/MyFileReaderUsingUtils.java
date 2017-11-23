@@ -78,7 +78,6 @@ class MyFileReaderUsingUtils implements MyFileReaderInterface {
             for (int i = 0; (i < numOfLines) && iterator.hasNext(); i++) {
                 lines.add(iterator.nextLine());
             }
-            
         } catch (Exception e) {
             LOGGER.error("Read operation failed: ", e);
             lines = null;
